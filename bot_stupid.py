@@ -4,7 +4,7 @@ import telebot
 import requests
 from settings import *
 from my_functions import *
-from google_service import GoogleSheet
+
 
 
 bot = telebot.TeleBot(BOT_TOKEN)
@@ -144,14 +144,14 @@ def get_name_team_product(message):
 
 
 def get_video(message):
-    name_vedeo = download_video(message, bot)
-    add_user_data(message.chat.id, second_key='id_video', value=name_vedeo[0])
-    add_user_data(message.chat.id, second_key='id_video_extension', value=name_vedeo[1])
+    data_video = download_video(message, bot)
+    add_user_data(message.chat.id, second_key='id_video', value=data_video[0])
+    add_user_data(message.chat.id, second_key='id_video_extension', value=data_video[1])
 
     data_for_writer = make_data_for_writer_table(update_user_data()[str(message.chat.id)])
     write_data_table_csv(HEADLINES_FOR_TABLE, data_for_writer)
-    gs = GoogleSheet()
-    gs.add(RANGE_FOR_GOOGLE_TABLE, data_for_writer)
+
+    upload_to_folder(ID_FOLDER, PATH_LOCAL_FOLDER+data_video[1], data_for_writer)
 
     bot.send_message(message.chat.id, MESSAGE_TEXT['finish_collection_data'])
 

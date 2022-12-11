@@ -8,7 +8,8 @@ MODERATOR_LINK = '@Akwinchester'
 MY_TABLE = '1AB1ZG-64PckVxstAtyDy7tBiApsSrbv6x1cmfznRA9I'
 ID_TABLE = MY_TABLE
 RANGE_FOR_GOOGLE_TABLE = 'Лист1!A1'
-
+ID_FOLDER = '1HjVbYHB4p66Ln_S0MCgHj840rHB8Grza'
+PATH_LOCAL_FOLDER = './files/'
 
 HEADLINES_FOR_TABLE = ['Фамилия Имя', 'Номер', 'ники', 'название к/п', 'видео']
 

@@ -7,61 +7,61 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from settings import *
 
-SAMPLE_RANGE_NAME = 'Test List!A2:E246'
+import google.auth
+from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
 
 
-class GoogleSheet:
+def add( service_table, values, range = None):
+    range = 'Лист1!A1'
     SPREADSHEET_ID = ID_TABLE
-    SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-    service = None
+    body = {'values': [values]}
+    result = service_table.spreadsheets().values().append(
+        spreadsheetId=SPREADSHEET_ID, range=range,
+        valueInputOption='USER_ENTERED', body=body).execute()
 
-    def __init__(self):
-        creds = None
-        if os.path.exists('token.pickle'):
-            with open('token.pickle', 'rb') as token:
-                creds = pickle.load(token)
 
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                print('flow')
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', self.SCOPES)
-                creds = flow.run_local_server(port=0)
-            with open('token.pickle', 'wb') as token:
-                pickle.dump(creds, token)
+def upload_to_folder(folder_id, file_for_load, data):
+    SCOPES = ['https://www.googleapis.com/auth/drive'+'https://www.googleapis.com/auth/spreadsheets']
+    creds = None
 
-        self.service = build('sheets', 'v4', credentials=creds)
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
 
-    def updateRangeValues(self, range, values):
-        data = [{
-            'range': range,
-            'values': values
-        }]
-        body = {
-            'valueInputOption': 'USER_ENTERED',
-            'data': data
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            print('flow')
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    try:
+        # create drive api client
+        service_drive = build('drive', 'v3', credentials=creds)
+        service_table = build('sheets', 'v4', credentials=creds)
+        file_metadata = {
+            'name': f'{data[-1]}',
+            'parents': [folder_id]
         }
-        result = self.service.spreadsheets().values().batchUpdate(spreadsheetId=self.SPREADSHEET_ID,
-                                                                  body=body).execute()
-        print('{0} cells updated.'.format(result.get('totalUpdatedCells')))
-
-    def add(self, range, values):
-
-        body = {'values':[values]}
-        result = self.service.spreadsheets().values().append(
-            spreadsheetId=self.SPREADSHEET_ID, range=range,
-            valueInputOption='USER_ENTERED', body=body).execute()
+        media = MediaFileUpload(file_for_load, mimetype='video/mp4', resumable=True)
+        file = service_drive.files().create(body=file_metadata, media_body=media,
+                                      fields='id').execute()
 
 
-def main():
-    gs = GoogleSheet()
-    test_range = 'Лист1!A1'
-    # gs.updateRangeValues(test_range, test_values)
-    gs.add(range=test_range, values=[2,3,4,'строка'])
-    gs.add(range=test_range, values=[2, 3, 4, 'строка'])
+        # запись в таблицу
+        file_id_drive = file.get('id')
+        data[-1] = f'=ГИПЕРССЫЛКА("https://drive.google.com/file/d/{file_id_drive}/view?usp=sharing"; "{data[-1]}")'
+        add(service_table=service_table, values=data)
+
+    except HttpError as error:
+        print(F'An error occurred: {error}')
+        file = None
 
 
-if __name__ == '__main__':
-    main()
+    return file.get('id')
+
