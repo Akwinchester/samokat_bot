@@ -29,7 +29,7 @@ def one_button(message):
     bot.send_message(message.chat.id, MESSAGE_TEXT['one_step'], reply_markup=markup)
 
 #    'two_button':'Мы собрали команду. Что делать дальше?'
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['two_button'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['two_button'][:-1:]))
 def two_button(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button = types.KeyboardButton(BUTTON_TEXT['three_button'])
@@ -38,7 +38,7 @@ def two_button(message):
 
 
 #    'three_button': 'Ага, мы придумали продукт. Что с ним делать?',
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['three_button'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['three_button'][:-1:]))
 def three_button(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button = types.KeyboardButton(BUTTON_TEXT['four_button'])
@@ -46,7 +46,7 @@ def three_button(message):
     bot.send_message(message.chat.id, MESSAGE_TEXT['three_step'], reply_markup=markup)
 
 #    'four_button': 'А что нужно знать перед съёмкой?'
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['four_button'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['four_button'][:-1:]))
 def three_button(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button = types.KeyboardButton(BUTTON_TEXT['five_button'])
@@ -55,7 +55,7 @@ def three_button(message):
 
 
 #    'five_button': 'В каком формате и как отправлять видео?'
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['five_button'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['five_button'][:-1:]))
 def six_button(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button = types.KeyboardButton(BUTTON_TEXT['six_button'])
@@ -63,7 +63,7 @@ def six_button(message):
     bot.send_message(message.chat.id, MESSAGE_TEXT['five_step'], reply_markup=markup)
 
 #    'six_button': 'А когда посмотрим другие работы и узнаем победителей?'
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['six_button'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['six_button'][:-1:]))
 def six_button(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
@@ -76,7 +76,7 @@ def six_button(message):
     bot.send_message(message.chat.id, MESSAGE_TEXT['six_step'], reply_markup=markup)
 
 #    'block_button_1':'Еще раз про сроки'
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['block_button_1'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['block_button_1'][:-1:]))
 def block_button_1(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
@@ -89,7 +89,7 @@ def block_button_1(message):
     bot.send_message(message.chat.id, MESSAGE_TEXT['block_button_1'], reply_markup=markup)
 
 #    'block_button_2':'Еще раз про формат видео'
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['block_button_2'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['block_button_2'][:-1:]))
 def block_button_2(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
@@ -102,7 +102,7 @@ def block_button_2(message):
     bot.send_message(message.chat.id, MESSAGE_TEXT['block_button_2'], reply_markup=markup)
 
 #    'block_button_3':'Готовы загрузить видео'
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['block_button_3'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['block_button_3'][:-1:]))
 def block_button_3(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
@@ -157,7 +157,7 @@ def get_video(message):
 
 
 #    'block_button_4':'Нужна помощь'
-@bot.message_handler(content_types=['text'], regexp=BUTTON_TEXT['block_button_4'])
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['block_button_4'][:-1:]))
 def block_button_4(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
