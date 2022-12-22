@@ -4,10 +4,11 @@ import telebot
 import requests
 from settings import *
 from my_functions import *
+import re
 
 
 
-bot = telebot.TeleBot(BOT_TOKEN)
+bot = telebot.TeleBot(BOT_TOKEN, parse_mode='HTML')
 
 
 
@@ -125,9 +126,14 @@ def get_name(message):
 
 
 def get_phone_number(message):
-    add_user_data(message.chat.id, second_key='phone_number', value=message.text)
-    bot.send_message(message.chat.id, MESSAGE_TEXT['get_nick_teammate'])
-    bot.register_next_step_handler(message, get_nick_teammate)
+
+    if re.search('[+][0-9]{11,11}', message.text) and len(message.text) == 12:
+        add_user_data(message.chat.id, second_key='phone_number', value="'" + message.text)
+        bot.send_message(message.chat.id, MESSAGE_TEXT['get_nick_teammate'])
+        bot.register_next_step_handler(message, get_nick_teammate)
+    else:
+        bot.send_message(message.chat.id,'введите номер в формате +7xxxxxxxxxx')
+        bot.register_next_step_handler(message, get_phone_number)
 
 
 def get_nick_teammate(message):
@@ -153,7 +159,7 @@ def get_video(message):
 
     upload_to_folder(ID_FOLDER, PATH_LOCAL_FOLDER+data_video[1], data_for_writer)
 
-    bot.send_message(message.chat.id, MESSAGE_TEXT['finish_collection_data'])
+    bot.send_message(message.chat.id, MESSAGE_TEXT['finish_collection_data'], parse_mode='HTML')
 
 
 #    'block_button_4':'Нужна помощь'
