@@ -232,11 +232,9 @@ def get_video(message):
             data_for_writer = make_data_for_writer_table(update_user_data()[str(message.chat.id)])
             write_data_table_csv(HEADLINES_FOR_TABLE, data_for_writer)
 
-            upload_to_folder(ID_FOLDER, PATH_LOCAL_FOLDER+data_video[1], data_for_writer)
-
             bot.send_message(message.chat.id, MESSAGE_TEXT['finish_collection_data'], parse_mode='HTML', reply_markup=markup)
         else:
-            bot.send_message(message.chat.id, MESSAGE_TEXT['photo'], reply_markup=markup)
+            bot.send_message(message.chat.id, MESSAGE_TEXT['photo'], reply_markup=markup_1)
             bot.register_next_step_handler(message, get_video)
 
 

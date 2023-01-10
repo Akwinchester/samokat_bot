@@ -6,7 +6,7 @@ import os
 import json
 import csv
 import datetime
-from google_service import *
+
 
 
 def add_user_data(chat_id, second_key, value):
@@ -76,11 +76,18 @@ def download_video(message, bot):
             f.write(downloaded_file)
 
         bot.send_message(ADMIN_ID,
-                            f'пользователь: {user_data["name"]} отправил видео с id {file_id_time}. Телефон: {user_data["phone_number"]}')
+                            f'''пользователь: {user_data["name"]} отправил видео
+Название: {file_id_time}
+Телефон: {user_data["phone_number"]}
+Видео загружено на сервер''')
         bot.copy_message(ADMIN_ID, message.chat.id, message.id)
+        return (file_id_time, file_id_time + '.' + extension_file)
     except:
         bot.send_message(ADMIN_ID,
-                            f'пользователь: {user_data["name"]} отправил видео с id {file_id_time}. Телефон: {user_data["phone_number"]}')
+                            f'''пользователь: {user_data["name"]} отправил видео
+Название: {file_id_time}
+Телефон: {user_data["phone_number"]}
+Необходимо скачать''')
         bot.copy_message(ADMIN_ID, message.chat.id, message.id)
-    return (file_id_time, file_id_time+'.'+extension_file)
+        return (file_id_time, file_id_time+'.'+'mp4')
 
