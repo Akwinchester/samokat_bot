@@ -31,11 +31,17 @@ def update_user_data():
     return user_data
 
 
+def past_link(text, link):
+    rusult = f'=ГИПЕРССЫЛКА("{link}"; "{text}")'
+    return rusult
+
 def write_data_table_csv(headlines, data):
     check_existence_and_make_csv(headlines)
+    data_1 = data[:]
+    data_1[-1] =past_link(data[-1], f'./{data[-1]}')
     with open('./files/data.csv', 'a', encoding='utf-8') as file:
         writer = csv.writer(file, delimiter=';', lineterminator='\n')
-        writer.writerow(data)
+        writer.writerow(data_1)
 
 
 def check_existence_and_make_csv(headlines):
@@ -46,6 +52,7 @@ def check_existence_and_make_csv(headlines):
 
 def make_data_for_writer_table(dict_data):
     data = []
+    # dict_data['video_link'] = past_link(dict_data['video_link'], f'./{dict_data["video_link"]}')
     for i in dict_data:
         data.append(dict_data[i])
     return data

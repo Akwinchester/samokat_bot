@@ -105,6 +105,20 @@ def block_button_2(message):
 #    'block_button_3':'Готовы загрузить видео'
 @bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['block_button_3'][:-1:]))
 def block_button_3(message):
+    markup_1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1_1 = types.KeyboardButton(BUTTON_TEXT['block_button_5'])
+    markup_1.add(item_1_1)
+
+    bot.send_message(message.chat.id, MESSAGE_TEXT['block_button_3'], reply_markup=markup_1)
+    check_existence_and_make_csv(HEADLINES_FOR_TABLE)
+    bot.register_next_step_handler(message, get_name)
+
+
+def get_name(message):
+    markup_1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1_1 = types.KeyboardButton(BUTTON_TEXT['block_button_5'])
+    markup_1.add(item_1_1)
+
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
     item_2 = types.KeyboardButton(BUTTON_TEXT['block_button_2'])
@@ -114,52 +128,116 @@ def block_button_3(message):
     markup.add(item_1, item_2)
     markup.add(item_3, item_4)
 
-    bot.send_message(message.chat.id, MESSAGE_TEXT['block_button_3'], reply_markup=markup)
-    check_existence_and_make_csv(HEADLINES_FOR_TABLE)
-    bot.register_next_step_handler(message, get_name)
-
-
-def get_name(message):
-    add_user_data(message.chat.id, second_key='name', value=message.text)
-    bot.send_message(message.chat.id, MESSAGE_TEXT['get_phone_number'])
-    bot.register_next_step_handler(message, get_phone_number)
-
-
-def get_phone_number(message):
-
-    if re.search('[+][0-9]{11,11}', message.text) and len(message.text) == 12:
-        add_user_data(message.chat.id, second_key='phone_number', value="'" + message.text)
-        bot.send_message(message.chat.id, MESSAGE_TEXT['get_nick_teammate'])
-        bot.register_next_step_handler(message, get_nick_teammate)
+    if message.text == BUTTON_TEXT['block_button_5']:
+        bot.send_message(message.chat.id, MESSAGE_TEXT['exit_data_collection'], reply_markup=markup)
     else:
-        bot.send_message(message.chat.id,'введите номер в формате +7xxxxxxxxxx')
+        add_user_data(message.chat.id, second_key='name', value=message.text)
+        bot.send_message(message.chat.id, MESSAGE_TEXT['get_phone_number'], reply_markup=markup_1)
         bot.register_next_step_handler(message, get_phone_number)
 
 
+def get_phone_number(message):
+    markup_1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1_1 = types.KeyboardButton(BUTTON_TEXT['block_button_5'])
+    markup_1.add(item_1_1)
+
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
+    item_2 = types.KeyboardButton(BUTTON_TEXT['block_button_2'])
+    item_3 = types.KeyboardButton(BUTTON_TEXT['block_button_3'])
+    item_4 = types.KeyboardButton(BUTTON_TEXT['block_button_4'])
+
+    markup.add(item_1, item_2)
+    markup.add(item_3, item_4)
+    if message.text == BUTTON_TEXT['block_button_5']:
+        bot.send_message(message.chat.id, MESSAGE_TEXT['exit_data_collection'], reply_markup=markup)
+    else:
+        if re.search('[+][0-9]{11,11}', message.text) and len(message.text) == 12:
+            add_user_data(message.chat.id, second_key='phone_number', value="'" + message.text)
+            bot.send_message(message.chat.id, MESSAGE_TEXT['get_nick_teammate'], reply_markup=markup_1)
+            bot.register_next_step_handler(message, get_nick_teammate)
+        else:
+            bot.send_message(message.chat.id,MESSAGE_TEXT['now_pattern_phone'], reply_markup=markup_1)
+            bot.register_next_step_handler(message, get_phone_number)
+
+
 def get_nick_teammate(message):
-    add_user_data(message.chat.id, second_key='nick_teammate', value=message.text)
-    bot.send_message(message.chat.id, MESSAGE_TEXT['get_name_team_product'])
-    bot.register_next_step_handler(message, get_name_team_product)
+    markup_1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1_1 = types.KeyboardButton(BUTTON_TEXT['block_button_5'])
+    markup_1.add(item_1_1)
+
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
+    item_2 = types.KeyboardButton(BUTTON_TEXT['block_button_2'])
+    item_3 = types.KeyboardButton(BUTTON_TEXT['block_button_3'])
+    item_4 = types.KeyboardButton(BUTTON_TEXT['block_button_4'])
+
+    markup.add(item_1, item_2)
+    markup.add(item_3, item_4)
+
+    if message.text == BUTTON_TEXT['block_button_5']:
+        bot.send_message(message.chat.id, MESSAGE_TEXT['exit_data_collection'], reply_markup=markup)
+    else:
+        add_user_data(message.chat.id, second_key='nick_teammate', value=message.text)
+        bot.send_message(message.chat.id, MESSAGE_TEXT['get_name_team_product'], reply_markup=markup_1)
+        bot.register_next_step_handler(message, get_name_team_product)
 
 
 def get_name_team_product(message):
-    add_user_data(message.chat.id, second_key='name_team_product', value=message.text)
-    bot.send_message(message.chat.id, MESSAGE_TEXT['get_video'])
-    bot.register_next_step_handler(message, get_video)
+    markup_1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1_1 = types.KeyboardButton(BUTTON_TEXT['block_button_5'])
+    markup_1.add(item_1_1)
+
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
+    item_2 = types.KeyboardButton(BUTTON_TEXT['block_button_2'])
+    item_3 = types.KeyboardButton(BUTTON_TEXT['block_button_3'])
+    item_4 = types.KeyboardButton(BUTTON_TEXT['block_button_4'])
+
+    markup.add(item_1, item_2)
+    markup.add(item_3, item_4)
+
+    if message.text == BUTTON_TEXT['block_button_5']:
+        bot.send_message(message.chat.id, MESSAGE_TEXT['exit_data_collection'], reply_markup=markup)
+    else:
+        add_user_data(message.chat.id, second_key='name_team_product', value=message.text)
+        bot.send_message(message.chat.id, MESSAGE_TEXT['get_video'], reply_markup=markup_1)
+        bot.register_next_step_handler(message, get_video)
 
 
 
 def get_video(message):
-    data_video = download_video(message, bot)
-    add_user_data(message.chat.id, second_key='id_video', value=data_video[0])
-    add_user_data(message.chat.id, second_key='id_video_extension', value=data_video[1])
+    markup_1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1_1 = types.KeyboardButton(BUTTON_TEXT['block_button_5'])
+    markup_1.add(item_1_1)
 
-    data_for_writer = make_data_for_writer_table(update_user_data()[str(message.chat.id)])
-    write_data_table_csv(HEADLINES_FOR_TABLE, data_for_writer)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
+    item_2 = types.KeyboardButton(BUTTON_TEXT['block_button_2'])
+    item_3 = types.KeyboardButton(BUTTON_TEXT['block_button_3'])
+    item_4 = types.KeyboardButton(BUTTON_TEXT['block_button_4'])
 
-    upload_to_folder(ID_FOLDER, PATH_LOCAL_FOLDER+data_video[1], data_for_writer)
+    markup.add(item_1, item_2)
+    markup.add(item_3, item_4)
+    if message.text == BUTTON_TEXT['block_button_5']:
+        bot.send_message(message.chat.id, MESSAGE_TEXT['exit_data_collection'], reply_markup=markup)
+    else:
+        if message.video or message.document:
+            data_video = download_video(message, bot)
+            add_user_data(message.chat.id, second_key='id_video', value=data_video[0])
+            # add_user_data(message.chat.id, second_key='video_link', value=past_link(data_video[1], f'./{data_video[1]}'))
+            add_user_data(message.chat.id, second_key='video_link',
+                          value=data_video[1])
 
-    bot.send_message(message.chat.id, MESSAGE_TEXT['finish_collection_data'], parse_mode='HTML')
+            data_for_writer = make_data_for_writer_table(update_user_data()[str(message.chat.id)])
+            write_data_table_csv(HEADLINES_FOR_TABLE, data_for_writer)
+
+            upload_to_folder(ID_FOLDER, PATH_LOCAL_FOLDER+data_video[1], data_for_writer)
+
+            bot.send_message(message.chat.id, MESSAGE_TEXT['finish_collection_data'], parse_mode='HTML', reply_markup=markup)
+        else:
+            bot.send_message(message.chat.id, MESSAGE_TEXT['photo'], reply_markup=markup)
+            bot.register_next_step_handler(message, get_video)
 
 
 #    'block_button_4':'Нужна помощь'
@@ -175,6 +253,17 @@ def block_button_4(message):
     markup.add(item_3, item_4)
     bot.send_message(message.chat.id, MESSAGE_TEXT['block_button_4'], reply_markup=markup)
 
+@bot.message_handler(content_types=['text'], regexp=r'{}*'.format(BUTTON_TEXT['block_button_5'][:-1:]))
+def block_button_4(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item_1 = types.KeyboardButton(BUTTON_TEXT['block_button_1'])
+    item_2 = types.KeyboardButton(BUTTON_TEXT['block_button_2'])
+    item_3 = types.KeyboardButton(BUTTON_TEXT['block_button_3'])
+    item_4 = types.KeyboardButton(BUTTON_TEXT['block_button_4'])
+
+    markup.add(item_1, item_2)
+    markup.add(item_3, item_4)
+    bot.send_message(message.chat.id, "Продолжим", reply_markup=markup)
 # @bot.message_handler(content_types=['text'])
 # def body(message):
 #     chat_id = message.chat.id
